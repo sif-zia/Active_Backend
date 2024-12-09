@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import lightgbm as lgb
 import numpy as np
+import joblib
 
 app = Flask(__name__)
 
@@ -9,7 +10,11 @@ app = Flask(__name__)
 CORS(app)
 
 # Load the model
-# model = lgb.Booster(model_file="lightgbm_model.txt")
+try:
+	model = joblib.load("lgbm_model.pkl")
+except Exception as e:
+	print(f"Error loading the model: {e}")
+	exit(1)
 
 @app.route("/predict", methods=["POST"])
 def predict():
